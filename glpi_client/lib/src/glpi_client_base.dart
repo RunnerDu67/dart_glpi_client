@@ -62,7 +62,7 @@ class GlpiService {
   /// Récupère un item spécifique par son ID.
   /// [itemType] : Le type d'objet (ex: 'Ticket', 'Computer').
   /// [id] : L'ID de l'objet à récupérer.
-  Future<Map<String, dynamic>> getItem({
+  Future<dynamic> getItem({
     required String itemType,
     required int id,
   }) async {
@@ -77,7 +77,7 @@ class GlpiService {
   /// Récupère un item spécifique par son ID.
   /// [itemType] : Le type d'objet (ex: 'Ticket', 'Computer').
   /// [id] : L'ID de l'objet à récupérer.
-  Future<List<Map<String, dynamic>>> getAllItems({
+  Future<dynamic> getAllItems({
     required String itemType,
   }) async {
     final response = await http.get(
@@ -91,7 +91,7 @@ class GlpiService {
   /// Récupère un item spécifique par son ID.
   /// [itemType] : Le type d'objet (ex: 'Ticket', 'Computer').
   /// [id] : L'ID de l'objet à récupérer.
-  Future<List<Map<String, dynamic>>> getSubItem({
+  Future<dynamic> getSubItem({
     required String itemType,
     required int id,
     required String subItemType,
@@ -107,7 +107,7 @@ class GlpiService {
   /// Ajoute un nouvel item.
   /// [itemType] : Le type d'objet à créer.
   /// [data] : Le `Map` contenant les données de l'objet.
-  Future<Map<String, dynamic>> addItem({
+  Future<dynamic> addItem({
     required String itemType,
     required Map<String, dynamic> data,
   }) async {
@@ -125,7 +125,7 @@ class GlpiService {
   /// Ajoute un nouvel item.
   /// [itemType] : Le type d'objet à créer.
   /// [data] : Le `Map` contenant les données de l'objet.
-  Future<Map<String, dynamic>> addSubItem({
+  Future<dynamic> addSubItem({
     required String itemType,
     required int id,
     required String subItemType,
@@ -146,7 +146,7 @@ class GlpiService {
   /// [itemType] : Le type d'objet à mettre à jour.
   /// [id] : L'ID de l'objet à modifier.
   /// [data] : Le `Map` contenant les champs à modifier.
-  Future<Map<String, dynamic>> updateItem({
+  Future<dynamic> updateItem({
     required String itemType,
     required int id,
     required Map<String, dynamic> data,
@@ -164,7 +164,7 @@ class GlpiService {
   /// [itemType] : Le type d'objet à mettre à jour.
   /// [id] : L'ID de l'objet à modifier.
   /// [data] : Le `Map` contenant les champs à modifier.
-  Future<Map<String, dynamic>> updateSubItem({
+  Future<dynamic> updateSubItem({
     required String itemType,
     required int id,
     required String subItemType,
