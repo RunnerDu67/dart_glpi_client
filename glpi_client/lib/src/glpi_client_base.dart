@@ -64,7 +64,7 @@ class GlpiService {
   /// [id] : L'ID de l'objet à récupérer.
   Future<dynamic> getItem({
     required String itemType,
-    required int id,
+    required String id,
   }) async {
     final response = await http.get(
       Uri.parse('$apiUrl/$itemType/$id'),
@@ -93,7 +93,7 @@ class GlpiService {
   /// [id] : L'ID de l'objet à récupérer.
   Future<dynamic> getSubItem({
     required String itemType,
-    required int id,
+    required String id,
     required String subItemType,
   }) async {
     final response = await http.get(
@@ -127,7 +127,7 @@ class GlpiService {
   /// [data] : Le `Map` contenant les données de l'objet.
   Future<dynamic> addSubItem({
     required String itemType,
-    required int id,
+    required String id,
     required String subItemType,
     required Map<String, dynamic> data,
   }) async {
@@ -148,7 +148,7 @@ class GlpiService {
   /// [data] : Le `Map` contenant les champs à modifier.
   Future<dynamic> updateItem({
     required String itemType,
-    required int id,
+    required String id,
     required Map<String, dynamic> data,
   }) async {
     final response = await http.put(
@@ -166,7 +166,7 @@ class GlpiService {
   /// [data] : Le `Map` contenant les champs à modifier.
   Future<dynamic> updateSubItem({
     required String itemType,
-    required int id,
+    required String id,
     required String subItemType,
     required Map<String, dynamic> data,
   }) async {
@@ -202,7 +202,7 @@ class GlpiService {
   /// [id] : L'ID de l'objet à supprimer.
   Future<void> deleteSubItem({
     required String itemType,
-    required int id,
+    required String id,
     required String subItemType,
   }) async {
     final response = await http.delete(
@@ -267,7 +267,7 @@ class GlpiService {
   /// Retourne un Map contenant les informations du document créé.
   Future<Map<String, dynamic>> uploadDocument({
     required String itemType,
-    required int itemId,
+    required String itemId,
     required String filePath,
     required String displayName,
     String? comment,
@@ -318,7 +318,7 @@ class GlpiService {
   /// Retourne une liste de Maps, chaque Map représentant un document.
   Future<List<dynamic>> getDocumentsForItem({
     required String itemType,
-    required int itemId,
+    required String itemId,
   }) async {
     final response = await http.get(
       Uri.parse('$apiUrl/$itemType/$itemId/Document'),

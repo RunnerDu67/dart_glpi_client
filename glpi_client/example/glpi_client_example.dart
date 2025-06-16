@@ -6,7 +6,7 @@ void main() async {
   String userToken = "";
   final glpi = GlpiService(apiUrl: apiUrl, appToken: appToken, userToken: userToken);
   await glpi.initSession();
-  Map<String, dynamic> ticket = await glpi.getItem(itemType: "Ticket", id: 5);
+  Map<String, dynamic> ticket = await glpi.getItem(itemType: "Ticket", id: '5');
   print(ticket);
 
   String itemType = "Phone";
