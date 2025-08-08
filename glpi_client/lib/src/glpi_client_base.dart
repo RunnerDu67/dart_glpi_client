@@ -77,9 +77,7 @@ class GlpiService {
   /// Récupère un item spécifique par son ID.
   /// [itemType] : Le type d'objet (ex: 'Ticket', 'Computer').
   /// [id] : L'ID de l'objet à récupérer.
-  Future<dynamic> getAllItems({
-    required String itemType,
-  }) async {
+  Future<dynamic> getAllItems({required String itemType}) async {
     final response = await http.get(
       Uri.parse('$apiUrl/$itemType/'),
       headers: _getHeaders(),
@@ -273,27 +271,36 @@ class GlpiService {
     String? comment,
   }) async {
     // On crée une requête "multipart", nécessaire pour envoyer des fichiers.
+    final String fileName = filePath.split("/").last;
     final request = http.MultipartRequest(
       'POST',
       Uri.parse('$apiUrl/Document'),
     );
 
     // On attache les en-têtes d'authentification
-    request.headers.addAll(_getHeaders());
+    request.headers.addAll(_getHeadersUpload());
 
-    // On prépare le corps de la requête au format JSON attendu par GLPI
-    final documentData = {
-      'name': displayName,
-      'itemtype': itemType,
-      'items_id': itemId,
-      if (comment != null) '_comment': comment,
-    };
-    request.fields['input'] = json.encode(documentData);
+    // Le champ 'uploadManifest' qui contient du JSON.
+    // On le prépare sous forme de chaîne de caractères.
+    String uploadManifestJson = jsonEncode({
+      "input": {
+        "name": displayName,
+        "_filename": [fileName],
+      },
+    });
+    request.fields['uploadManifest'] = uploadManifestJson;
 
-    // On attache le fichier. 'filename[0]' est le nom de champ attendu par l'API GLPI.
+    try {
     request.files.add(
-      await http.MultipartFile.fromPath('filename[0]', filePath),
+      await http.MultipartFile.fromPath(
+        'filename[0]', // Le nom du champ attendu par l'API
+        filePath, // Le chemin local de ton fichier
+        filename: fileName, // Le nom du fichier tel que le serveur le verra
+      ),
     );
+  } catch (e) {
+    throw Exception("Erreur lors de la lecture du fichier : $e");
+  }
 
     // On envoie la requête et on attend la réponse
     final streamedResponse = await request.send();
@@ -370,6 +377,15 @@ class GlpiService {
       'Session-Token': _sessionToken!,
       'App-Token': appToken,
     };
+  }
+
+  Map<String, String> _getHeadersUpload() {
+    if (!isSessionActive) {
+      throw Exception(
+        'Session non initialisée. Appelez initSession() d\'abord.',
+      );
+    }
+    return {'Session-Token': _sessionToken!, 'App-Token': appToken};
   }
 
   /// Construit les paramètres de la requête pour la fonction de recherche.
