@@ -1,6 +1,6 @@
 name: glpi_client
 description: A starting point for Dart libraries or applications.
-version: 1.0.0
+version: 1.0.1
 # repository: https://github.com/my_org/my_repo
 
 environment:
@@ -9,7 +9,6 @@ environment:
 # Add regular dependencies here.
 dependencies:
   http: ^1.4.0
-  # path: ^1.8.0
 
 dev_dependencies:
   lints: ^6.0.0
