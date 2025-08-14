@@ -291,16 +291,16 @@ class GlpiService {
     request.fields['uploadManifest'] = uploadManifestJson;
 
     try {
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'filename[0]', // Le nom du champ attendu par l'API
-        filePath, // Le chemin local de ton fichier
-        filename: fileName, // Le nom du fichier tel que le serveur le verra
-      ),
-    );
-  } catch (e) {
-    throw Exception("Erreur lors de la lecture du fichier : $e");
-  }
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'filename[0]', // Le nom du champ attendu par l'API
+          filePath, // Le chemin local de ton fichier
+          filename: fileName, // Le nom du fichier tel que le serveur le verra
+        ),
+      );
+    } catch (e) {
+      throw Exception("Erreur lors de la lecture du fichier : $e");
+    }
 
     // On envoie la requête et on attend la réponse
     final streamedResponse = await request.send();
@@ -353,13 +353,17 @@ class GlpiService {
       headers: _getHeaders(),
     );
 
-    if (response.statusCode == 200) {
-      // On ne décode pas le JSON, on retourne directement le corps de la réponse en bytes.
-      return response.bodyBytes;
-    } else {
-      throw Exception(
-        'Erreur lors du téléchargement du document $documentId: ${response.body}',
-      );
+    try {
+      // 3. Vérifier le code de statut
+      if (response.statusCode == 200) {
+        // 4. SUCCÈS ! Retourner directement les bytes du corps de la réponse.
+        return response.bodyBytes;
+      } else {
+        throw Exception("Error on getting file : ${response.body}");
+      }
+    } catch (e) {
+      // Gérer les erreurs réseau (inchangé)
+      rethrow;
     }
   }
 
