@@ -348,22 +348,19 @@ class GlpiService {
   /// Retourne les données brutes du fichier (en bytes).
   /// Vous pouvez ensuite utiliser ces données pour enregistrer le fichier sur le disque.
   Future<Uint8List> downloadDocument(int documentId) async {
-    final response = await http.get(
-      Uri.parse('$apiUrl/Document/$documentId'),
-      headers: _getHeaders(),
-    );
+    final uri = Uri.parse('$apiUrl/Document/');
+    final request = http.Request('GET', uri);
+    request.headers.addAll(_getHeadersUpload());
+    request.body = json.encode({'id': documentId});
+    final streamedResponse = await request.send();
 
-    try {
-      // 3. Vérifier le code de statut
-      if (response.statusCode == 200) {
-        // 4. SUCCÈS ! Retourner directement les bytes du corps de la réponse.
-        return response.bodyBytes;
-      } else {
-        throw Exception("Error on getting file : ${response.body}");
-      }
-    } catch (e) {
-      // Gérer les erreurs réseau (inchangé)
-      rethrow;
+    if (streamedResponse.statusCode == 200) {
+      // On ne décode pas le JSON, on retourne directement le corps de la réponse en bytes.
+      return streamedResponse.stream.toBytes();
+    } else {
+      throw Exception(
+        'Erreur lors du téléchargement du document $documentId: ${streamedResponse.reasonPhrase}',
+      );
     }
   }
 
@@ -390,6 +387,20 @@ class GlpiService {
       );
     }
     return {'Session-Token': _sessionToken!, 'App-Token': appToken};
+  }
+
+  Map<String, String> _getHeadersDownload() {
+    if (!isSessionActive) {
+      throw Exception(
+        'Session non initialisée. Appelez initSession() d\'abord.',
+      );
+    }
+    return {
+      'Content-Type': 'application/json',
+      'Session-Token': _sessionToken!,
+      'App-Token': appToken,
+      'Accept': 'application/octet-stream',
+    };
   }
 
   /// Construit les paramètres de la requête pour la fonction de recherche.
