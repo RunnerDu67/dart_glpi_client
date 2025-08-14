@@ -348,10 +348,10 @@ class GlpiService {
   /// Retourne les données brutes du fichier (en bytes).
   /// Vous pouvez ensuite utiliser ces données pour enregistrer le fichier sur le disque.
   Future<Uint8List> downloadDocument(int documentId) async {
-    final uri = Uri.parse('$apiUrl/Document/');
+    final uri = Uri.parse('$apiUrl/Document/$documentId');
     final request = http.Request('GET', uri);
-    request.headers.addAll(_getHeadersUpload());
-    request.body = json.encode({'id': documentId});
+    request.headers.addAll(_getHeadersDownload());
+    // request.body = json.encode({"input": {"id": documentId}});
     final streamedResponse = await request.send();
 
     if (streamedResponse.statusCode == 200) {
@@ -396,7 +396,7 @@ class GlpiService {
       );
     }
     return {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Session-Token': _sessionToken!,
       'App-Token': appToken,
       'Accept': 'application/octet-stream',
