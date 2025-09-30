@@ -109,10 +109,13 @@ class GlpiService {
     required String itemType,
     required Map<String, String> data,
   }) async {
+    final Map<String, Map<String, String>> sendData = {'input': data};
+    final String jsonData = json.encode(sendData);
+    print("JSON :: $jsonData");
     final response = await http.post(
       Uri.parse('$apiUrl/$itemType'),
       headers: _getHeaders(),
-      body: json.encode({'input': data}),
+      body: jsonData,
     );
     if (response.statusCode == 201) {
       return json.decode(response.body); // 201 Created
