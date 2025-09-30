@@ -107,9 +107,9 @@ class GlpiService {
   /// [data] : Le `Map` contenant les données de l'objet.
   Future<dynamic> addItem({
     required String itemType,
-    required Map<String, String> data,
+    required Map<String, dynamic> data,
   }) async {
-    final Map<String, Map<String, String>> sendData = {'input': data};
+    final Map<String, Map<String, dynamic>> sendData = {'input': data};
     final String jsonData = json.encode(sendData);
     print("JSON :: $jsonData");
     final response = await http.post(
