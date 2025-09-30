@@ -117,6 +117,7 @@ class GlpiService {
       headers: _getHeaders(),
       body: jsonData,
     );
+    print("Status Code :: ${response.statusCode}");
     if (response.statusCode == 201) {
       return json.decode(response.body); // 201 Created
     }
