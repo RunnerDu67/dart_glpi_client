@@ -107,7 +107,7 @@ class GlpiService {
   /// [data] : Le `Map` contenant les données de l'objet.
   Future<dynamic> addItem({
     required String itemType,
-    required Map<String, dynamic> data,
+    required Map<String, String> data,
   }) async {
     final response = await http.post(
       Uri.parse('$apiUrl/$itemType'),
